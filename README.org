@@ -1,0 +1,4 @@
+* elmo.el - Edit Elm source code in emacs 
+
+This is a simple major mode for editing Elm in emacs. Still definitively a work in progress, so I would not expect wonders as of yet.
+
