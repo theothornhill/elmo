@@ -106,7 +106,7 @@ See `recenter-positions'"
 
 (defmacro elm--find-indentation-of-tokens (tokens)
   `(save-excursion
-     (re-search-backward (regexp-opt ',tokens) (point-min) t)
+     (re-search-backward (regexp-opt ',tokens) (point-min) t nil)
      (current-indentation)))
 
 (defmacro elm--two-lines-same-token-p (token)
@@ -127,7 +127,7 @@ See `recenter-positions'"
   `(save-excursion
      (forward-line -1)
      (back-to-indentation)
-     (looking-at (regexp-opt ',tokens))))
+     (looking-at-p (regexp-opt ',tokens))))
 
 (defun elm-indent-line ()
   "Set indent levels for Elm source code.  
@@ -153,38 +153,50 @@ multiple times.  Otherwise, just indent to the correct level."
              ;; Now we are positioned at start of indentation.
              ;; Logic below assumes this is true.
              (cond
-              ((looking-at (regexp-opt elm--starter-syms)) 0)
-              ((looking-at elm--regexp-function-line-beginning) 0)
-              ((looking-at (regexp-opt '("{-" "-}"))) 0)
-              ((elm--previous-line-ends-with (":" "=")) positive-offset)
-              ((and (= indent-level-previous-line 0) (looking-at "=")) positive-offset)
+              ((looking-at-p (regexp-opt elm--starter-syms)) 0)
+              ((looking-at-p ".*\s:\s") 0)
+              (;; If previous line is a type declaration
+               (save-excursion (forward-line -1) (looking-at-p ".*\s:\s")) 0)
+              ((looking-at-p (regexp-opt '("{-" "-}"))) 0)
+              ((elm--previous-line-ends-with (":" "=" "->")) positive-offset)
+              ((and (= indent-level-previous-line 0) (looking-at-p "=")) positive-offset)
               ((save-excursion (end-of-line) (looking-back "="))
                (+ (elm--find-indentation-of-tokens ("let")) elm-indent-offset))
-              ((looking-at "let") positive-offset)
+              ((looking-at-p "let") positive-offset)
               ((elm--previous-line-starts-with ("in")) indent-level-previous-line)
-              ((looking-at "}") (elm--find-indentation-of-tokens ("{")))
-              ((looking-at "]") (elm--find-indentation-of-tokens ("[")))
-              ((looking-at ")") (elm--find-indentation-of-tokens ("(")))
-              ((looking-at "|") (elm--find-indentation-of-tokens ("=")))
-              ((looking-at "else") (elm--find-indentation-of-tokens ("if" "then")))
-              ((looking-at "then") (elm--find-indentation-of-tokens ("if")))
-              ((looking-at ",") (elm--find-indentation-of-tokens ("{" "[" "(")))
-              ((looking-at "--") indent-level-previous-line)
-              ((looking-at "->") indent-level-previous-line)
-              ((save-excursion (end-of-line) (looking-back "->"))
+              ((looking-at-p "}") (elm--find-indentation-of-tokens ("{")))
+              ((looking-at-p "]") ;(elm--find-indentation-of-tokens ("["))
+               (save-excursion (forward-char 1) (backward-sexp 1) (current-indentation))
+               )
+              ((looking-at-p ")") (elm--find-indentation-of-tokens ("(")))
+              ((looking-at-p "|") (elm--find-indentation-of-tokens ("=")))
+              ((looking-at-p "else") (elm--find-indentation-of-tokens ("if" "then")))
+              ((looking-at-p "then") (elm--find-indentation-of-tokens ("if")))
+              ((looking-at-p ",") ;(elm--find-indentation-of-tokens ("{" "[" "("))
+               (save-excursion (backward-up-list 1) (current-indentation)))
+              ((elm--previous-line-starts-with ("--")) indent-level-previous-line)
+              ((looking-at-p "->") indent-level-previous-line)
+              (;; If line contains an arrow but is not a type declaration
+               (and (looking-at-p ".*->") (not (looking-at-p ".*\s:\s")))
                (+ (elm--find-indentation-of-tokens ("case")) elm-indent-offset))
               ((elm--two-lines-same-token-p "|>") indent-level-previous-line)
               ((elm--two-lines-same-token-p "(") indent-level-previous-line)
-              ((looking-at "in") (elm--find-indentation-of-tokens ("let")))
-              ((elm--previous-line-ends-with ("=" "->" "<-" "(" "[" "{" "of" "if" "else" "then"))
+              ((looking-at-p "in") (elm--find-indentation-of-tokens ("let")))
+              ((elm--previous-line-ends-with ("=" "<-" "(" "[" "{" "of" "if" "else" "then"))
                positive-offset)
+
               ;; Cycling of offsets
-              ((eq indent-levels 'minus) negative-offset)
+              ;; ((eq indent-levels 'minus) negative-offset)
               ((eq indent-levels 'same) indent-level-previous-line)
-              ((eq indent-levels 'plus) positive-offset)))))
+              ((eq indent-levels 'plus) positive-offset)
+              ))))
       (if (<= (current-column) (current-indentation))
           (ignore-errors (indent-line-to indent))
         (save-excursion (ignore-errors (indent-line-to indent)))))))
+
+
+(defun elm--set-compile-command ()
+  (set (make-local-variable 'compile-command) elm-compile-command))
 
 ;;; Font locking
 (defgroup elm-font-lock nil
