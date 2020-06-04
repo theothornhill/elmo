@@ -119,13 +119,15 @@ See `recenter-positions'"
   "Create a new buffer with Elm repl started and switch to it."
   (interactive)
   (elm--with-project-root
-    (switch-to-buffer-other-window (make-comint "Elm Repl" "elm" nil "repl"))))
+    (switch-to-buffer-other-window
+     (make-comint "Elm Repl" "elm" nil "repl"))))
 
 (defun elm-reactor ()
   "Create a new buffer with Elm reactor started and open it."
   (interactive)
   (elm--with-project-root
-    (display-buffer (make-comint "Elm Reactor" "elm" nil "reactor"))))
+    (display-buffer
+     (make-comint "Elm Reactor" "elm" nil "reactor"))))
 
 ;;; Indentation
 
