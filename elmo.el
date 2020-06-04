@@ -83,12 +83,6 @@
 See `recenter-positions'"
   :group 'elm)
 
-(defcustom elm-format-on-save t
-  "Enable formatting on save."
-  :type 'boolean
-  :group 'elm
-  :safe #'booleanp)
-
 (defun elm-beginning-of-defun (&optional arg)
   (interactive "p")
   (unless arg (setq arg 1))
@@ -230,18 +224,6 @@ multiple times.  Otherwise, just indent to the correct level."
     (modify-syntax-entry ?\\ "\\" syntax-table)
     syntax-table))
 
-(defun elm-format-buffer ()
-  (interactive)
-  (if (executable-find "elm-format")
-    (and (shell-command (concat "elm-format " buffer-file-name " --yes"))
-         (revert-buffer t t t))
-    (error "Cannot format since elm-format isn't installed.")))
-
-(defun elm-after-save-hook ()
-  (when elm-format-on-save
-    (elm-format-buffer)))
-
-
 ;;;###autoload
 (define-derived-mode elm-mode prog-mode "Elm"
   "Major mode for Elm code."
@@ -272,8 +254,6 @@ multiple times.  Otherwise, just indent to the correct level."
   ;; Misc
   (setq-local open-paren-in-column-0-is-defun-start nil)
 
-  ;; After save
-  (add-hook 'after-save-hook 'elm-after-save-hook nil t))
   ;; Compilation
   (add-hook 'elm-mode-hook 'elm--set-compile-command))
 
