@@ -106,18 +106,22 @@ See `recenter-positions'"
 
 ;;; Tooling integration
 
+(defmacro elm--with-project-root (&rest body)
+  (declare (debug t) (indent 0))
+  `(let ((default-directory (project-root (project-current))))
+     ,@body))
+
 (defun elm-repl ()
   "Create a new buffer with Elm repl started and switch to it."
   (interactive)
-  (let ((default-directory (project-root (project-current))))
+  (elm--with-project-root
     (switch-to-buffer-other-window (make-comint "Elm Repl" "elm" nil "repl"))))
 
 (defun elm-reactor ()
-  "Create a new buffer with Elm reactor started and switch to it."
+  "Create a new buffer with Elm reactor started and open it."
   (interactive)
-  (let ((default-directory (project-root (project-current))))
-    (with-current-buffer (make-comint "Elm Reactor" "elm" nil "reactor")
-      (message (string-trim (buffer-string))))))
+  (elm--with-project-root
+    (display-buffer (make-comint "Elm Reactor" "elm" nil "reactor"))))
 
 ;;; Indentation
 
