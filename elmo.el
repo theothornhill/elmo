@@ -3,7 +3,7 @@
 ;; Copyright (C) 2020 Theodor Thornhill
 
 ;; Author: Theodor Thornhill
-;; Package-Requires: ((emacs "26.3"))
+;; Package-Requires: ((emacs "26.3") (project "0.3.0")
 ;; URL: https://github.com/theothornhill/elm
 ;; Package-Version: 0.1
 
@@ -71,7 +71,13 @@
   :group 'elm
   :safe #'integerp)
 
-(defcustom elm-indent-positions '(plus same minus)
+(defcustom elm-compile-command "elm make src/Main.elm --output elm.js"
+  "Command to use in `project-compile' for Elm projects"
+  :type 'string
+  :group 'elm
+  :safe #'stringp)
+
+(defcustom elm-indent-positions '(plus same)
   "Possible cycling order positions for indentation.
 
 See `recenter-positions'"
@@ -98,6 +104,7 @@ See `recenter-positions'"
 
 (defvar elm-mode-map
   (let ((map (make-keymap)))
+    (define-key map (kbd "C-c C-c") 'project-compile)
     map)
   "Keymap for Elm major mode.")
 
@@ -267,6 +274,8 @@ multiple times.  Otherwise, just indent to the correct level."
 
   ;; After save
   (add-hook 'after-save-hook 'elm-after-save-hook nil t))
+  ;; Compilation
+  (add-hook 'elm-mode-hook 'elm--set-compile-command))
 
 (defun elm-project-root (dir)
   "Create the cons cell `project-root' needs to discover root."
@@ -276,6 +285,10 @@ multiple times.  Otherwise, just indent to the correct level."
   
 (cl-defmethod project-root ((project (head elm)))
   (cdr project))
+
+(cl-defmethod project-ignores ((project (head elm)) dir)
+  (append vc-directory-exclusion-list
+          (list "./elm-stuff/")))
 
 (add-hook 'project-find-functions #'elm-project-root)
 
