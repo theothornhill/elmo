@@ -99,8 +99,25 @@ See `recenter-positions'"
 (defvar elm-mode-map
   (let ((map (make-keymap)))
     (define-key map (kbd "C-c C-c") 'project-compile)
+    (define-key map (kbd "C-c C-z") 'elm-repl)
+    (define-key map (kbd "C-c C-r") 'elm-reactor)
     map)
   "Keymap for Elm major mode.")
+
+;;; Tooling integration
+
+(defun elm-repl ()
+  "Create a new buffer with Elm repl started and switch to it."
+  (interactive)
+  (let ((default-directory (project-root (project-current))))
+    (switch-to-buffer-other-window (make-comint "Elm Repl" "elm" nil "repl"))))
+
+(defun elm-reactor ()
+  "Create a new buffer with Elm reactor started and switch to it."
+  (interactive)
+  (let ((default-directory (project-root (project-current))))
+    (with-current-buffer (make-comint "Elm Reactor" "elm" nil "reactor")
+      (message (string-trim (buffer-string))))))
 
 ;;; Indentation
 
