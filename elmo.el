@@ -33,6 +33,10 @@
   "^\\([a-z_][0-9A-Za-z_']*\\|([^)]+)\\)"
   "Regexp matching camelCase on line beginning.")
 
+(defconst elm--regexp-function-type-annotation
+  (concat elm--regexp-function-line-beginning "\s:\s")
+  "Regexp matching a type annotation starting on line beginning.")
+
 (defconst elm--regexp-type
   "\\b[A-Z][0-9A-Za-z_']*"
   "Regexp matching PascalCase types.")
@@ -175,9 +179,9 @@ multiple times.  Otherwise, just indent to the correct level."
              ;; Logic below assumes this is true.
              (cond
               ((looking-at-p (regexp-opt elm--starter-syms)) 0)
-              ((looking-at-p ".*\s:\s") 0)
+              ((looking-at-p elm--regexp-function-type-annotation) 0)
               (;; If previous line is a type declaration
-               (save-excursion (forward-line -1) (looking-at-p ".*\s:\s")) 0)
+               (save-excursion (forward-line -1) (looking-at-p elm--regexp-function-type-annotation)) 0)
               ((looking-at-p (regexp-opt '("{-" "-}"))) 0)
               ((elm--previous-line-ends-with (":" "=" "->")) positive-offset)
               ((and (= indent-level-previous-line 0) (looking-at-p "=")) positive-offset)
