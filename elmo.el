@@ -185,10 +185,11 @@ multiple times.  Otherwise, just indent to the correct level."
               (;; If previous line is a type declaration
                (save-excursion (forward-line -1) (looking-at-p elm--regexp-function-type-annotation)) 0)
               ((looking-at-p (regexp-opt '("{-" "-}"))) 0)
-              ((elm--previous-line-ends-with (":" "=" "->")) positive-offset)
+              ((elm--previous-line-ends-with (":" "=" "->" "exposing")) positive-offset)
               ((and (= indent-level-previous-line 0) (looking-at-p "=")) positive-offset)
               ((save-excursion (end-of-line) (looking-back "="))
                (+ (elm--find-indentation-of-tokens ("let")) elm-indent-offset))
+              ((elm--previous-line-starts-with ("let")) positive-offset)
               ((looking-at-p "let") positive-offset)
               ((elm--previous-line-starts-with ("in")) indent-level-previous-line)
               ((looking-at-p "}") (elm--find-indentation-of-tokens ("{")))
