@@ -81,7 +81,7 @@
   :group 'elm
   :safe #'stringp)
 
-(defcustom elm-indent-positions '(plus same)
+(defcustom elm-indent-positions '(same plus)
   "Possible cycling order positions for indentation.
 
 See `recenter-positions'"
@@ -209,9 +209,10 @@ multiple times.  Otherwise, just indent to the correct level."
                (+ (elm--find-indentation-of-tokens ("case")) elm-indent-offset))
               ((elm--two-lines-same-token-p "(") indent-level-previous-line)
               ((looking-at-p "in") (elm--find-indentation-of-tokens ("let")))
-              ((elm--previous-line-ends-with ("=" "<-" "(" "[" "{" "of" "if" "else" "then")) positive-offset)
+              (;; KLUDGE: Serves as a sort of "catch all for less specific rules.
+               ;; Clean up this at some point!
+               (elm--previous-line-ends-with ("=" "<-" "(" "[" "]" "{" "of" "if" "else" "then")) positive-offset)
               ;; Cycling of offsets
-              ;; ((eq indent-levels 'minus) negative-offset)
               ((eq indent-levels 'same) indent-level-previous-line)
               ((eq indent-levels 'plus) positive-offset)))))
       (if (<= (current-column) (current-indentation))
