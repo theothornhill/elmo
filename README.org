@@ -35,3 +35,5 @@ Also you are free to bind =project-shell=, =project-find-regexp=, =project-find-
  
 
 
+** Why another elm-mode?
+When setting up [[https://github.com/jcollard/elm-mode][elm-mode]], I found it to be more hassle than I wanted. I tried to avoid the features related to elm version < 0.19.1, but they wanted to get to me. In addition, I found the indentation method chosen a bit confusing. The most important reason though is that I wanted to program something :)
