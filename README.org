@@ -23,6 +23,9 @@ Also you are free to bind =project-shell=, =project-find-regexp=, =project-find-
 | C-c C-c | =elm-make=    |
 | C-c C-r | =elm-reactor= |
 
+*** Indentation
+=elmo= tries to be smart about indentation. However, =elm= is a pretty difficult language to indent, since it is whitespace sensitive. It is an ongoing process to adjust indenting to be less prone to errors. However, your lsp client of choice should be more than capable to correct indentation.
+
 ** Customization
 =elmo= provides some options for customization, however there are not too many yet.
 
