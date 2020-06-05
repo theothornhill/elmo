@@ -1,4 +1,34 @@
 * elmo.el - Edit Elm source code in emacs 
 
-This is a simple major mode for editing Elm in emacs. Still definitively a work in progress, so I would not expect wonders as of yet.
+This is a simple major mode for editing Elm in emacs. It does not try to be compatible with Elm version < 0.19.1. For that you can look at the much more complete [[https://github.com/jcollard/elm-mode][elm-mode]]
+
+** Features
+
+*** project.el
+=elmo= relies a lot on =project.el= available in newer versions of emacs. Some integrations =elmo= provides are:
+
+- Find root in a project, with or without version controlled folders.
+- Using =project-compile=, trigger =elm make= in root folder.
+- Ignores =elm-stuff= by default, so =project-find-regexp= shows less garbage.
+
+
+Also you are free to bind =project-shell=, =project-find-regexp=, =project-find-file= and friends. 
+
+
+*** Integration with Elm tooling
+
+| Binding | Name        |
+|---------+-------------|
+| C-c C-z | =elm-repl=    |
+| C-c C-c | =elm-make=    |
+| C-c C-r | =elm-reactor= |
+
+** Customization
+=elmo= provides some options for customization, however there are not too many yet.
+
+- =elm-root-file=: Set file that denotes root. Defaults to "elm.json".
+- =elm-indent-offset=: Defaults to 4.
+- =elm-compile-command=: Defaults to =elm make src/Main.elm --output elm.js=
+ 
+
 
