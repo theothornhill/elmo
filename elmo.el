@@ -51,7 +51,7 @@
     "case" "of"
     "let" "in"
     "type" "alias"
-    "module"
+    "effect" "module"
     "where"
     "import" "as" "hiding" "exposing"
     "port" "export" "foreign"
@@ -60,7 +60,7 @@
   "Reserved keywords.")
 
 (defconst elm--starter-syms
-  '("import" "module" "type" "port")
+  '("import" "module" "type" "port" "effect")
   "Keywords starting at indentation 0.")
 
 (defcustom elm-root-file "elm.json"
