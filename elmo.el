@@ -81,6 +81,11 @@
   :group 'elm
   :safe #'stringp)
 
+(defcustom elm-project-ignores '("elm-stuff" "elm.js")
+  "List of patterns to ignore in a VC backed project.el instance."
+  :type '(repeat string)
+  :safe #'listp)
+
 (defcustom elm-indent-positions '(same plus)
   "Possible cycling order positions for indentation.
 
@@ -291,24 +296,9 @@ multiple times.  Otherwise, just indent to the correct level."
   
   ;; Misc
   (setq-local open-paren-in-column-0-is-defun-start nil)
-
+  (setq-local project-vc-ignores elm-project-ignores)
   ;; Compilation
   (add-hook 'elm-mode-hook 'elm--set-compile-command))
-
-(defun elm-project-root (dir)
-  "Create the cons cell `project-root' needs to discover root."
-  (let ((root (locate-dominating-file dir elm-root-file)))
-    (when root
-      (cons 'elm root))))
-  
-(cl-defmethod project-root ((project (head elm)))
-  (cdr project))
-
-(cl-defmethod project-ignores ((project (head elm)) dir)
-  (append vc-directory-exclusion-list
-          (list "./elm-stuff/")))
-
-(add-hook 'project-find-functions #'elm-project-root)
 
 ;;;###autoload
 (add-to-list 'auto-mode-alist '("\\.elm\\'" . elm-mode))
