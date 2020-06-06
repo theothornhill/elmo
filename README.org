@@ -7,7 +7,7 @@ This is a simple major mode for editing Elm in emacs. It does not try to be comp
 *** project.el
 =elmo= relies a lot on =project.el= available in newer versions of emacs. Some integrations =elmo= provides are:
 
-- Find root in a project, with or without version controlled folders.
+- Find root in a project, depends on git for now. Use =git init= if it cannot find root.
 - Using =project-compile=, trigger =elm make= in root folder.
 - Ignores =elm-stuff= by default, so =project-find-regexp= shows less garbage.
 
