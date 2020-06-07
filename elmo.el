@@ -131,6 +131,12 @@ See `recenter-positions'"
 
 ;;; Indentation
 
+(defun elm--find-indentation-of-list ()
+  (save-excursion
+    (backward-up-list 1)
+    (+ (- (current-column) (current-indentation))
+       (current-indentation))))
+
 (defmacro elm--find-indentation-of-tokens (tokens)
   `(save-excursion
      (re-search-backward (regexp-opt ',tokens) (point-min) t nil)
