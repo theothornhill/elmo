@@ -103,6 +103,7 @@
     (define-key map (kbd "C-c C-z") 'elm-repl)
     (define-key map (kbd "C-c C-r") 'elm-reactor)
 
+    (define-key map (kbd "C-c C-i") 'elm-indent-one-level)
     (define-key map (kbd "C-m") 'elm-newline-and-indent)
     map)
   "Keymap for Elm major mode.")
@@ -190,6 +191,11 @@ default to the indentation level of previous line."
        ((looking-at-p "then") (elm--find-indentation-of-tokens ("if")))
        (t indent-level-previous-line)))))
 
+(defun elm-do-indent (indent)
+  (if (<= (current-column) (current-indentation))
+      (ignore-errors (indent-line-to indent))
+    (save-excursion (ignore-errors (indent-line-to indent)))))
+
 (defun elm-indent-line ()
   "Set indent levels for Elm source code.  
 
@@ -201,15 +207,20 @@ Otherwise, just indent to the correct level."
         (cc (current-column)))
     (if (and (eq this-command last-command)
              (/= 0 cc))
-        (indent-line-to (* (/ (- cc 1) elm-indent-offset) elm-indent-offset))
-      (if (<= cc (current-indentation))
-          (ignore-errors (indent-line-to indent))
-        (save-excursion (ignore-errors (indent-line-to indent)))))))
+        (indent-line-to (* (/ (- cc 1) elm-indent-offset)
+                           elm-indent-offset))
+      (elm-do-indent indent))))
 
 (defun elm-newline-and-indent ()
   (interactive)
   (newline)
   (indent-for-tab-command))
+
+(defun elm-indent-one-level (&optional arg)
+  (interactive "p")
+  (setq arg (or arg 1))
+  (elm-do-indent (+ (* elm-indent-offset arg)
+                    (current-column))))
 
 (defun elm--set-compile-command ()
   (set (make-local-variable 'compile-command) elm-compile-command))

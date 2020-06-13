@@ -26,7 +26,7 @@ Also you are free to bind =project-shell=, =project-find-regexp=, =project-find-
 *** Indentation
 =elmo= tries to be smart about indentation. However, =elm= is a pretty difficult language to indent, since it is whitespace sensitive. =elmo= offers indentation where it is easy to determine, otherwise we cycle back and forth by repeating =Tab=.
 
-To indent one level you can press =C-q Tab=.
+- To indent one level you can press =C-c C-i=. It also takes an optional arg to indent more than one level
 
 ** Customization
 =elmo= provides some options for customization, however there are not too many yet.
