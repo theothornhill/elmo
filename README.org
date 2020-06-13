@@ -8,12 +8,12 @@ This is a simple major mode for editing Elm in emacs. It does not try to be comp
 =elmo= relies a lot on =project.el= available in newer versions of emacs. Some integrations =elmo= provides are:
 
 - Find root in a project, depends on git for now. Use =git init= if it cannot find root.
+- Add patterns you want to ignore to .gitignore, as usual.
 - Using =project-compile=, trigger =elm make= in root folder.
 - Ignores =elm-stuff= by default, so =project-find-regexp= shows less garbage.
 
 
 Also you are free to bind =project-shell=, =project-find-regexp=, =project-find-file= and friends. 
-
 
 *** Integration with Elm tooling
 
@@ -24,16 +24,15 @@ Also you are free to bind =project-shell=, =project-find-regexp=, =project-find-
 | C-c C-r | =elm-reactor= |
 
 *** Indentation
-=elmo= tries to be smart about indentation. However, =elm= is a pretty difficult language to indent, since it is whitespace sensitive. It is an ongoing process to adjust indenting to be less prone to errors. However, your lsp client of choice should be more than capable to correct indentation.
+=elmo= tries to be smart about indentation. However, =elm= is a pretty difficult language to indent, since it is whitespace sensitive. =elmo= offers indentation where it is easy to determine, otherwise we cycle back and forth by repeating =Tab=.
+
+To indent one level you can press =C-q Tab=.
 
 ** Customization
 =elmo= provides some options for customization, however there are not too many yet.
 
-- =elm-root-file=: Set file that denotes root. Defaults to "elm.json".
 - =elm-indent-offset=: Defaults to 4.
-- =elm-compile-command=: Defaults to =elm make src/Main.elm --output elm.js=
- 
-
+- =elm-compile-command=: Defaults to =elm make src/Main.elm=
 
 ** Why another elm-mode?
 When setting up [[https://github.com/jcollard/elm-mode][elm-mode]], I found it to be more hassle than I wanted. I tried to avoid the features related to elm version < 0.19.1, but they wanted to get to me. In addition, I found the indentation method chosen a bit confusing. The most important reason though is that I wanted to program something :)
