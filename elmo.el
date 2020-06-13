@@ -41,6 +41,15 @@
   "\\b[A-Z][0-9A-Za-z_']*"
   "Regexp matching PascalCase types.")
 
+(defconst elm--regexp-delimiters
+  (regexp-opt '("{" "}" "[" "]" "(" ")" "," "\\"))
+  "Regexp matching delimiters.")
+
+(defconst elm--regexp-operators
+  (regexp-opt '("+" "-" "*" "/" "|>" "<|" "->" ":"
+                "|" "=" "==" "<" ">" ">=" "<="))
+  "Regexp matching delimiters.")
+
 (defgroup elm nil
   "Support for the Elm Programming Language."
   :link '(url-link :tag "Github" "https://github.com/theothornhill/elmo")
@@ -227,6 +236,12 @@ Otherwise, just indent to the correct level."
 
      ;; Types
      (,elm--regexp-type . font-lock-type-face)
+
+     ;; Delimiters
+     (,elm--regexp-delimiters . font-lock-type-face)
+
+     ;; Operators
+     (,elm--regexp-operators . font-lock-variable-name-face)
      )))
 
 (defvar elm--syntax-table
