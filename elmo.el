@@ -72,12 +72,6 @@
   '("import" "module" "type" "port" "effect")
   "Keywords starting at indentation 0.")
 
-(defcustom elm-root-file "elm.json"
-  "The file signifying root of a project."
-  :type 'string
-  :group 'elm
-  :safe #'stringp)
-
 (defcustom elm-indent-offset 4
   "Indent Elm code by this number of spaces."
   :type 'integer
