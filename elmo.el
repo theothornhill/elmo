@@ -237,13 +237,13 @@ Otherwise, just indent to the correct level."
      (,(regexp-opt elm--reserved-keywords 'symbols) . font-lock-keyword-face)
 
      ;; Function names
-     (,elm--regexp-function-line-beginning . font-lock-variable-name-face)
+     (,elm--regexp-function-line-beginning . font-lock-function-name-face)
 
      ;; Types
      (,elm--regexp-type . font-lock-type-face)
 
      ;; Delimiters
-     (,elm--regexp-delimiters . font-lock-type-face)
+     (,elm--regexp-delimiters . font-lock-negation-char-face)
 
      ;; Operators
      (,elm--regexp-operators . font-lock-variable-name-face)
