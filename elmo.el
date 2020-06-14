@@ -155,6 +155,7 @@
   `(save-excursion
      (forward-line -1)
      (end-of-line)
+     (forward-comment (- (point)))
      (looking-back (regexp-opt ',tokens))))
 
 (defmacro elm--previous-line-starts-with (tokens)
