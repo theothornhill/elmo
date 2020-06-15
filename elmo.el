@@ -119,7 +119,7 @@
   "Create a new buffer with Elm repl started and switch to it."
   (interactive)
   (elm--with-project-root
-    (switch-to-buffer-other-window
+    (pop-to-buffer
      (make-comint "Elm Repl" "elm" nil "repl"))))
 
 (defun elm-reactor ()
